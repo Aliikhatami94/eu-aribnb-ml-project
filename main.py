@@ -26,3 +26,12 @@ preprocessor = ColumnTransformer(transformers=[('num', num_transformer, num_cols
 df = preprocessor.fit_transform(df)
 
 df = pd.DataFrame(df)
+
+from scipy import stats
+
+# Calculate the z-score for each numeric feature
+z_scores = stats.zscore(df.select_dtypes(include=["int", "float"]))
+
+# Remove rows where any of the z-scores are greater than 3 or less than -3
+df = df[(z_scores < 3).all(axis=1) & (z_scores > -3).all(axis=1)]
+
