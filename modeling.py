@@ -14,7 +14,7 @@ from eli5.sklearn import PermutationImportance
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 
-from data_processing import X_processed, y
+from data_transformation import X_processed, y
 
 # _________________________________________________________
 
