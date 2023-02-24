@@ -1,10 +1,15 @@
 import pandas as pd
-
+from scipy import stats
+import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from xgboost import XGBRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.model_selection import train_test_split
+
 
 # Read the data
 df = pd.read_csv("Airbnb Prices in Europe/amsterdam_weekdays.csv")
@@ -25,8 +30,14 @@ cat_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='most_frequ
 # Bundle the transformers
 preprocessor = ColumnTransformer(transformers=[('num', num_transformer, num_cols), ('cat', cat_transformer, cat_cols)])
 
+# Remove outliers form the entire dataset
+z_scores = stats.zscore(np.array(df[num_cols]))
+abs_z_scores = np.abs(z_scores)
+filtered_entries = (abs_z_scores < 3).all(axis=1)
+X = X[filtered_entries]
+y = y[filtered_entries]
+
 # _________________________________________________________________
-from sklearn.model_selection import train_test_split
 
 # Split the data into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -40,31 +51,9 @@ X_train_processed = preprocessor.fit_transform(X_train)
 X_val_processed = preprocessor.transform(X_val)
 X_test_processed = preprocessor.transform(X_test)
 
-from sklearn.model_selection import GridSearchCV
-from xgboost import XGBRegressor
-
-"""
-# Just to find the best parameters
-
-# define parameters for grid search
-param_grid = {
-    'n_estimators': [100, 200, 300, 400, 500],
-    'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3],
-    }
-
-xgb = XGBRegressor()
-
-# Create the grid search
-grid_search = GridSearchCV(estimator=xgb, param_grid=param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1)
-
-grid_search.fit(X_train_processed, y_train)
-
-# Print the best parameters
-print(f"Best parameters: {grid_search.best_params_}")
-"""
 
 # Create the model
-xgb = XGBRegressor(n_estimators=300, learning_rate=0.05, random_state=42)
+xgb = XGBRegressor(n_estimators=100, learning_rate=0.05, random_state=42)
 
 # Fit the model
 xgb.fit(X_train_processed, y_train)
@@ -75,7 +64,6 @@ y_pred_val = xgb.predict(X_val_processed)
 y_pred_test = xgb.predict(X_test_processed)
 
 
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 def print_performance(y_true, y_pred):
     """
