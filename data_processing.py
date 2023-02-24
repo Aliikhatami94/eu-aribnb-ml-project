@@ -20,3 +20,4 @@ y = df.realSum
 
 # Log transform the data
 y = np.log(y)
+

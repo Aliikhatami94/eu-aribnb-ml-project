@@ -22,29 +22,31 @@ def get_scores(X_train, y_train, X_valid, y_valid, model_name, model):
     scores['train_r2'] = r2_score(y_train, y_pred_train)
 
     # Calculate the predictions
-    y_pred_valid = model.predict(X_valid)
+    y_valid_pred = model.predict(X_valid)
 
     # Calculate the scores
-    scores['valid_mae'] = mean_absolute_error(y_valid, y_pred_valid)
-    scores['valid_mse'] = mean_squared_error(y_valid, y_pred_valid)
-    scores['valid_rmse'] = np.sqrt(mean_squared_error(y_valid, y_pred_valid))
-    scores['valid_r2'] = r2_score(y_valid, y_pred_valid)
+    scores['valid_mae'] = mean_absolute_error(y_valid, y_valid_pred)
+    scores['valid_mse'] = mean_squared_error(y_valid, y_valid_pred)
+    scores['valid_rmse'] = np.sqrt(mean_squared_error(y_valid, y_valid_pred))
+    scores['valid_r2'] = r2_score(y_valid, y_valid_pred)
 
     # Return the scores
     return scores
 
 
 # Compare the predictions to the actual values
-def compare_predictions(y_valid, y_pred_valid):
+def compare_predictions(y_actual, y_pred):
     # Create a dataframe of the predictions and actual values
-    predictions_df = pd.DataFrame({'actual': y_valid, 'predictions': y_pred_valid})
+    predictions_df = pd.DataFrame({'actual': y_actual, 'predictions': y_pred})
 
-    # Create a scatter plot of the predictions and actual values
+    # Visualize actuals vs predictions with different colors for each
     plt.figure(figsize=(10, 10))
-    plt.scatter(predictions_df.actual, predictions_df.predictions, s=5)
+    plt.scatter(predictions_df.actual, predictions_df.predictions, c='blue', alpha=0.5, label='Predictions')
+    plt.scatter(predictions_df.actual, predictions_df.actual, c='red', alpha=0.5, label='Actual')
     plt.xlabel('Actual')
     plt.ylabel('Predictions')
-    plt.title('Predictions vs Actual')
+    plt.title('Actual vs Predictions')
+    plt.legend(loc='best')
     plt.show()
 
     # Create a histogram of the residuals
@@ -62,8 +64,13 @@ def compare_predictions(y_valid, y_pred_valid):
     print(predictions_df.head(10))
 
 
+# Calculate the predictions
+y_valid_pred = model.predict(X_valid)
+
 # Get the scores
 score = get_scores(X_train, y_train, X_valid, y_valid, model_name, model)
+compare_predictions(y_valid, y_valid_pred)
 
 print('Training R^2: ', score['train_r2'])
 print('Validation R^2: ', score['valid_r2'])
+print('Test R^2: ', score['test_r2'])
