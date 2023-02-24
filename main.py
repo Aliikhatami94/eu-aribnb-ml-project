@@ -8,6 +8,8 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
+from xgboost import XGBRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 
 data_list = glob.glob('Airbnb Prices in Europe/*.csv')
@@ -53,3 +55,34 @@ X_train, X_valid, y_train, y_valid = train_test_split(X_processed, y, test_size=
 X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
 
 
+# Define the model
+model = XGBRegressor(n_estimators=300, learning_rate=0.05)
+
+# Fit the model
+model.fit(X_train, y_train)
+
+
+# Get a evaluation function that returns all the accruacy metrics
+def evaluate_model(model, X, y):
+    y_pred = model.predict(X)
+    mae = mean_absolute_error(y, y_pred)
+    mse = mean_squared_error(y, y_pred)
+    rmse = np.sqrt(mse)
+    r2 = r2_score(y, y_pred)
+    print('MAE: ', mae)
+    print('MSE: ', mse)
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+    return mae, mse, rmse, r2
+
+# Evaluate the model on the training set
+print('Training set')
+evaluate_model(model, X_train, y_train)
+
+# Evaluate the model on the testing set
+print('\nTesting set')
+evaluate_model(model, X_test, y_test)
+
+# Evaluate the model on the validation set
+print('\nValidation set')
+evaluate_model(model, X_valid, y_valid)
