@@ -14,7 +14,8 @@ from eli5.sklearn import PermutationImportance
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 
-from data_transformation import X_processed, y
+from data_transformation import X_processed
+from data_processing import y
 
 # _________________________________________________________
 
@@ -30,19 +31,37 @@ def get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model_name, m
     # Calculate the predictions
     fit_model(model_name, model)
     y_pred_train = model.predict(X_train)
-    print('Training MAE:', mean_absolute_error(y_train, y_pred_train))
-    print('Training RMSE:', np.sqrt(mean_squared_error(y_train, y_pred_train)))
-    print('Training R2:', r2_score(y_train, y_pred_train))
 
+    # Create a dictionary of the scores
+    scores = {}
+
+    # Calculate the scores
+    scores['train_mae'] = mean_absolute_error(y_train, y_pred_train)
+    scores['train_mse'] = mean_squared_error(y_train, y_pred_train)
+    scores['train_rmse'] = np.sqrt(mean_squared_error(y_train, y_pred_train))
+    scores['train_r2'] = r2_score(y_train, y_pred_train)
+
+    # Calculate the predictions
     y_pred_test = model.predict(X_test)
-    print('\nTesting MAE:', mean_absolute_error(y_test, y_pred_test))
-    print('Testing RMSE:', np.sqrt(mean_squared_error(y_test, y_pred_test)))
-    print('Testing R2:', r2_score(y_test, y_pred_test))
 
+    # Calculate the scores
+    scores['test_mae'] = mean_absolute_error(y_test, y_pred_test)
+    scores['test_mse'] = mean_squared_error(y_test, y_pred_test)
+    scores['test_rmse'] = np.sqrt(mean_squared_error(y_test, y_pred_test))
+    scores['test_r2'] = r2_score(y_test, y_pred_test)
+
+    # Calculate the predictions
     y_pred_valid = model.predict(X_valid)
-    print('\nValidation MAE:', mean_absolute_error(y_valid, y_pred_valid))
-    print('Validation RMSE:', np.sqrt(mean_squared_error(y_valid, y_pred_valid)))
-    print('Validation R2:', r2_score(y_valid, y_pred_valid))
+
+    # Calculate the scores
+    scores['valid_mae'] = mean_absolute_error(y_valid, y_pred_valid)
+    scores['valid_mse'] = mean_squared_error(y_valid, y_pred_valid)
+    scores['valid_rmse'] = np.sqrt(mean_squared_error(y_valid, y_pred_valid))
+    scores['valid_r2'] = r2_score(y_valid, y_pred_valid)
+
+    # Return the scores
+
+    return scores
 
 
 # Pick your model
@@ -74,4 +93,4 @@ fit_model(model_name, model)
 y_pred_train = model.predict(X_train)
 
 # Get the scores
-get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model_name, model)
+first_score = get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model_name, model)

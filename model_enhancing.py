@@ -30,4 +30,7 @@ fit_model(model_name, model)
 y_pred_train = model.predict(X_train)
 
 # Get the scores
-get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model_name, model)
+second_score = get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model_name, model)
+
+# Print the score improvement
+print('The score improvement is: ', round((second_score['train_rmse'] - first_score['train_rmse']) / first_score['train_rmse'] * 100, 2), '%')

@@ -1,5 +1,6 @@
 import pandas as pd
 import glob
+import numpy as np
 
 data_list = glob.glob('Airbnb Prices in Europe/*.csv')
 
@@ -14,5 +15,8 @@ df['lat_lng'] = df['lat'] * df['lng']
 df.drop(['lat', 'lng'], axis=1, inplace=True)
 
 # Set X and y
-X = df.drop(['realSum', 'attr_index', 'rest_index'], axis=1)
+X = df.drop(['realSum', 'attr_index', 'attr_index_norm', 'rest_index', 'rest_index_norm'], axis=1)
 y = df.realSum
+
+# Log transform the data
+y = np.log(y)
