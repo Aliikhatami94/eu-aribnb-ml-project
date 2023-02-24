@@ -7,7 +7,12 @@ data_list = glob.glob('Airbnb Prices in Europe/*.csv')
 df = pd.concat(map(pd.read_csv, data_list))
 df.drop('Unnamed: 0', axis=1, inplace=True)
 
-# Set X and y
-X = df.drop('realSum', axis=1)
-y = df.realSum
+# Cross feature longitude and latitude
+df['lat_lng'] = df['lat'] * df['lng']
 
+# Drop the latitude and longitude columns
+df.drop(['lat', 'lng'], axis=1, inplace=True)
+
+# Set X and y
+X = df.drop(['realSum', 'attr_index', 'rest_index'], axis=1)
+y = df.realSum
