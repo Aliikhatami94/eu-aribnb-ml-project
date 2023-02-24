@@ -43,14 +43,14 @@ X_test_processed = preprocessor.transform(X_test)
 from sklearn.model_selection import GridSearchCV
 from xgboost import XGBRegressor
 
+"""
+# Just to find the best parameters
+
 # define parameters for grid search
 param_grid = {
     'n_estimators': [100, 200, 300, 400, 500],
     'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3],
     }
-
-"""
-# Just to find the best parameters
 
 xgb = XGBRegressor()
 
@@ -63,3 +63,37 @@ grid_search.fit(X_train_processed, y_train)
 print(f"Best parameters: {grid_search.best_params_}")
 """
 
+# Create the model
+xgb = XGBRegressor(n_estimators=300, learning_rate=0.05, random_state=42)
+
+# Fit the model
+xgb.fit(X_train_processed, y_train)
+
+# Predict the prices
+y_pred_train = xgb.predict(X_train_processed)
+y_pred_val = xgb.predict(X_val_processed)
+y_pred_test = xgb.predict(X_test_processed)
+
+
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+def print_performance(y_true, y_pred):
+    """
+    This function takes the true values and predicted values and prints the MAE, RMSE, and R-squared metrics.
+    """
+    mae = mean_absolute_error(y_true, y_pred)
+    rmse = mean_squared_error(y_true, y_pred, squared=False)
+    r2 = r2_score(y_true, y_pred)
+
+    print(f'Mean Absolute Error: {mae:.2f}')
+    print(f'Root Mean Squared Error: {rmse:.2f}')
+    print(f'R-squared: {r2:.2f}')
+
+
+# Evaluate the model
+print("Training set performance:")
+print_performance(y_train, y_pred_train)
+print('\nValidation set performance:')
+print_performance(y_val, y_pred_val)
+print('\nTest set performance:')
+print_performance(y_test, y_pred_test)
