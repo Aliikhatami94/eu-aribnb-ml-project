@@ -55,22 +55,16 @@ preprocessor = ColumnTransformer(
 X_processed = pd.DataFrame(preprocessor.fit_transform(X))
 X_processed.columns = num_cols + list(preprocessor.named_transformers_['cat'].named_steps['onehot'].get_feature_names_out(cat_cols))
 
+# _________________________________________________________
+
 # Split the data into training and validation sets
-X_train, X_valid, y_train, y_valid = train_test_split(X_processed, y, test_size=0.3, random_state=42)
+X_train, X_valid, y_train, y_valid = train_test_split(X_processed, y, test_size=0.2, random_state=42, shuffle=True)
 
 # Split the training data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42, shuffle=True)
 
-# Define the model
-xgb = XGBRegressor(n_estimators=500, learning_rate=0.01, n_jobs=4, early_stopping_rounds=5)
-rf = RandomForestRegressor(n_estimators=500, random_state=42, n_jobs=4)
-lr = LinearRegression()
 
-model = xgb
-
-# Fit the model
-model.fit(X_train, y_train, eval_set=[(X_valid, y_valid)], verbose=False)
-
+# Get the scores
 def get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model):
     # Calculate the predictions
     y_pred_train = model.predict(X_train)
@@ -88,21 +82,55 @@ def get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model):
     print('Validation RMSE:', np.sqrt(mean_squared_error(y_valid, y_pred_valid)))
     print('Validation R2:', r2_score(y_valid, y_pred_valid))
 
-# Find the feature importances
-perm = PermutationImportance(model, random_state=42).fit(X_valid, y_valid)
 
-# Show the feature importances in a dataframe
-weights_df = pd.DataFrame({'feature': X_valid.columns, 'weight': perm.feature_importances_})
-weights_df.sort_values('weight', ascending=False, inplace=True)
-weights_df.reset_index(drop=True, inplace=True)
+# Pick your model
+def reg_model(model):
+    if model == 'xgb':
+        return XGBRegressor(n_estimators=500, learning_rate=0.05, n_jobs=4, early_stopping_rounds=5, random_state=42)
+    elif model == 'rf':
+        return RandomForestRegressor(n_estimators=500, random_state=42)
+    elif model == 'lr':
+        return LinearRegression()
 
-# Drop the features with a weight of less than 0.01 from the feature data set
-X_train.drop(weights_df[weights_df.weight < 0.01].feature, axis=1, inplace=True)
-X_test.drop(weights_df[weights_df.weight < 0.01].feature, axis=1, inplace=True)
-X_valid.drop(weights_df[weights_df.weight < 0.01].feature, axis=1, inplace=True)
 
 # Fit the model
-model.fit(X_train, y_train, eval_set=[(X_valid, y_valid)], verbose=False)
+def fit_model(model):
+    if model == 'xgb':
+        return reg_model(model).fit(X_train, y_train, eval_set=[(X_valid, y_valid)], verbose=False)
+    elif model == 'rf':
+        return reg_model(model).fit(X_train, y_train)
+    elif model == 'lr':
+        return reg_model(model).fit(X_train, y_train)
+
+# Remove low importance features
+def remove_low_features(X_train, X_test, X_valid, y_train, y_test, y_valid, model):
+    # Find the feature importances
+    perm = PermutationImportance(model, random_state=42).fit(X_valid, y_valid)
+
+    # Show the feature importances in a dataframe
+    weights_df = pd.DataFrame({'feature': X_valid.columns, 'weight': perm.feature_importances_})
+    weights_df.sort_values('weight', ascending=False, inplace=True)
+    weights_df.reset_index(drop=True, inplace=True)
+
+    # Drop the features with a weight of less than 0.01 from the feature data set
+    X_train.drop(weights_df[weights_df.weight < 0.01].feature, axis=1, inplace=True)
+    X_test.drop(weights_df[weights_df.weight < 0.01].feature, axis=1, inplace=True)
+    X_valid.drop(weights_df[weights_df.weight < 0.01].feature, axis=1, inplace=True)
+
+    return X_train, X_test, X_valid, y_train, y_test, y_valid
+
+
+# Set model
+m = 'xgb'
+model = fit_model(m)
+fit_model(model)
+
+# Remove the low features
+X_train, X_test, X_valid, y_train, y_test, y_valid = remove_low_features(X_train, X_test, X_valid, y_train, y_test, y_valid, model)
+
+# Fit the model
+model = fit_model(m)
+fit_model(model)
 
 # Calculate the predictions
 y_pred_train = model.predict(X_train)
