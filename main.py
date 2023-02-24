@@ -40,8 +40,26 @@ X_train_processed = preprocessor.fit_transform(X_train)
 X_val_processed = preprocessor.transform(X_val)
 X_test_processed = preprocessor.transform(X_test)
 
+from sklearn.model_selection import GridSearchCV
+from xgboost import XGBRegressor
 
+# define parameters for grid search
+param_grid = {
+    'n_estimators': [100, 200, 300, 400, 500],
+    'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3],
+    }
 
+"""
+# Just to find the best parameters
 
+xgb = XGBRegressor()
 
+# Create the grid search
+grid_search = GridSearchCV(estimator=xgb, param_grid=param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1)
+
+grid_search.fit(X_train_processed, y_train)
+
+# Print the best parameters
+print(f"Best parameters: {grid_search.best_params_}")
+"""
 
