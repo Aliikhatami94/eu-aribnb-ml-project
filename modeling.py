@@ -27,47 +27,13 @@ X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=
 
 
 # Get the scores
-def get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model_name, model):
-    # Calculate the predictions
-    fit_model(model_name, model)
-    y_pred_train = model.predict(X_train)
 
-    # Create a dictionary of the scores
-    scores = {}
-
-    # Calculate the scores
-    scores['train_mae'] = mean_absolute_error(y_train, y_pred_train)
-    scores['train_mse'] = mean_squared_error(y_train, y_pred_train)
-    scores['train_rmse'] = np.sqrt(mean_squared_error(y_train, y_pred_train))
-    scores['train_r2'] = r2_score(y_train, y_pred_train)
-
-    # Calculate the predictions
-    y_pred_test = model.predict(X_test)
-
-    # Calculate the scores
-    scores['test_mae'] = mean_absolute_error(y_test, y_pred_test)
-    scores['test_mse'] = mean_squared_error(y_test, y_pred_test)
-    scores['test_rmse'] = np.sqrt(mean_squared_error(y_test, y_pred_test))
-    scores['test_r2'] = r2_score(y_test, y_pred_test)
-
-    # Calculate the predictions
-    y_pred_valid = model.predict(X_valid)
-
-    # Calculate the scores
-    scores['valid_mae'] = mean_absolute_error(y_valid, y_pred_valid)
-    scores['valid_mse'] = mean_squared_error(y_valid, y_pred_valid)
-    scores['valid_rmse'] = np.sqrt(mean_squared_error(y_valid, y_pred_valid))
-    scores['valid_r2'] = r2_score(y_valid, y_pred_valid)
-
-    # Return the scores
-
-    return scores
 
 
 # Pick your model
 def get_models(model_name):
     if model_name == 'xgb':
-        return XGBRegressor(n_estimators=500, learning_rate=0.05, n_jobs=4, early_stopping_rounds=5, random_state=42)
+        return XGBRegressor(n_estimators=500, learning_rate=0.05, n_jobs=4, early_stopping_rounds=5, random_state=42, reg_lambda=0.1)
     elif model_name == 'rf':
         return RandomForestRegressor(n_estimators=500, random_state=42)
     elif model_name == 'lr':
@@ -92,5 +58,3 @@ fit_model(model_name, model)
 # Calculate the predictions
 y_pred_train = model.predict(X_train)
 
-# Get the scores
-first_score = get_scores(X_train, y_train, X_test, y_test, X_valid, y_valid, model_name, model)
