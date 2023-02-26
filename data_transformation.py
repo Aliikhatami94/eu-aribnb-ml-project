@@ -20,10 +20,11 @@ cat_transformer = Pipeline(steps=[
 num_cols = [col for col in X.columns if X[col].dtype in ['int64', 'float64']]
 
 # Log transform the numerical columns
+"""
 for col in num_cols:
     X[col] = X[col].astype('float64').replace(0.0, 0.01)
     X[col] = np.log(X[col])
-
+"""
 # Preprocessing for numerical data
 num_transformer = SimpleImputer(strategy='mean')
 scaler = StandardScaler()

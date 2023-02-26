@@ -11,13 +11,25 @@ def plot_feature_dist(X):
 
 
 # Log transform the data
-def visualize_actual_dist(log_y):
-    plt.figure(figsize=(20,4))
-    log_y.hist(bins=100, range=(0, 2000))
+def visualize_price_dist(log_y):
+    # Visualize the distribution of the prices up to £1500
+    plt.figure(figsize=(10, 5))
+    log_y.hist(bins=100, range=(0, 1500))
     plt.margins(x=0)
     plt.axvline(log_y.mean(), color='orange', linestyle='--')
     plt.axvline(log_y.median(), color='red', linestyle='--')
-    plt.title("Airbnb prices", fontsize=16)
+    plt.title("Airbnb prices up to £1500", fontsize=16)
+    plt.xlabel("Price (£)")
+    plt.ylabel("Number of listings")
+    plt.show()
+
+    # Visualize the distribution of the prices from £1500 upwards
+    plt.figure(figsize=(10, 5))
+    log_y.hist(bins=100, range=(1500, max(log_y)))
+    plt.margins(x=0)
+    plt.axvline(log_y.mean(), color='orange', linestyle='--')
+    plt.axvline(log_y.median(), color='red', linestyle='--')
+    plt.title("Airbnb prices from £1500 upwards", fontsize=16)
     plt.xlabel("Price (£)")
     plt.ylabel("Number of listings")
     plt.show()
@@ -27,9 +39,9 @@ def visualize_actual_dist(log_y):
 
 
 # Log transform the data
-def visualize_log_dsit(y):
+def visualize_y_log_dsit(y):
     y = np.log(y)
-    plt.figure(figsize=(20,4))
+    plt.figure(figsize=(10,5))
     y.hist(bins=100, range=(0, 10))
     plt.margins(x=0)
 
@@ -43,13 +55,21 @@ def visualize_log_dsit(y):
     plt.ylabel("Number of listings")
     plt.show()
 
-    print(f"Log transformed")
-    print("____________________")
-    print(f"Mean: {np.exp(y.mean())}")
-    print(f"Median: {np.exp(y.median())}")
-
 
 plot_feature_dist(X)
-visualize_actual_dist(y)
-print("\n")
-visualize_log_dsit(y)
+
+visualize_y_log_dsit(y)
+visualize_price_dist(y)
+
+# Log transform the features
+def visualize_X_log_dsit(X):
+    num_cols = [col for col in X.columns if X[col].dtype in ['int64', 'float64']]
+    for col in num_cols:
+        X[col] = X[col].astype('float64').replace(0.0, 0.01)
+        X[col] = np.log(X[col])
+    plt.figure(figsize=(10,5))
+    X.hist(figsize=(10,11))
+    plt.show()
+
+
+visualize_X_log_dsit(X)

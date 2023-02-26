@@ -9,6 +9,12 @@ from data_processing import y
 
 # _________________________________________________________
 
+# Based on the log transformed data, Setting any price above 1500 to £1500
+y = np.where(y > 1500, 1500, y)
+
+# Setting any price below £50 to £50
+y = np.where(y < 50, 50, y)
+
 # Log transform the target variable
 y = np.log(y)
 
@@ -16,11 +22,7 @@ y = np.log(y)
 X_train, X_valid, y_train, y_valid = train_test_split(X_processed, y, test_size=0.2, random_state=42, shuffle=True)
 
 # Split the training data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42, shuffle=True)
-
-
-# Get the scores
-
+X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
 
 
 # Pick your model

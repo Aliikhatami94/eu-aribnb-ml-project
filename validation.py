@@ -64,13 +64,14 @@ def compare_predictions(y_actual, y_pred):
     print(predictions_df.head(10))
 
 
-# Calculate the predictions
-y_valid_pred = model.predict(X_valid)
-
 # Get the scores
 score = get_scores(X_train, y_train, X_valid, y_valid, model_name, model)
-compare_predictions(y_valid, y_valid_pred)
 
-print('Training R^2: ', score['train_r2'])
+print("Training predictions:")
+compare_predictions(y_valid, model.predict(X_valid))
+
+print("\nValidation predictions:")
+compare_predictions(y_train, model.predict(X_train))
+
+print('\nTraining R^2: ', score['train_r2'])
 print('Validation R^2: ', score['valid_r2'])
-print('Test R^2: ', score['test_r2'])
