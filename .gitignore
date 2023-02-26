@@ -1,3 +1,6 @@
+# created by virtualenv automatically
+*
+
 # Ignore pushing .ipynb_checkpoints to github
 *.ipynb_checkpoints/
 
