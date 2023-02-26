@@ -3,7 +3,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 import pandas as pd
-from matplotlib import pyplot as plt
 import numpy as np
 
 from data_processing import X
