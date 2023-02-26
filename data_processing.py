@@ -2,6 +2,7 @@ import pandas as pd
 import glob
 
 
+# Read all the csv files in the folder
 data_list = glob.glob('Airbnb Prices in Europe/*.csv')
 
 # Now we can use pandas to read all the csv files and combine them into one
