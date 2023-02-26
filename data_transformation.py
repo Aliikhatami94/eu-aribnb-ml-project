@@ -45,3 +45,5 @@ X_processed.columns = num_cols + list(preprocessor.named_transformers_['cat'].na
 X[num_cols].hist(figsize=(20, 20))
 plt.show()
 """
+
+print(X_processed.head(5))
