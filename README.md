@@ -23,7 +23,7 @@ Various visualizations are used to better understand the data, including:
 * Scatter plot of predicted vs. actual values
 * Histogram of residuals
 
-![Collinearity_heatmap.png](img/Collinearity_heatmap.png)
+![Collinearity_heatmap.png](img%2FCollinearity_heatmap.png)
 
 
 ## Data Preprocessing
@@ -37,7 +37,7 @@ Various visualizations are used to better understand the data, including:
 * Cross-featuring the longitude and latitude
 * Log transforming the numerical columns to improve normality of distributions
 
-![Feature importances.png](img/Feature importances.png)
+![Feature importances.png](img%2FFeature%20importances.png)
 
 
 ## Model
@@ -55,11 +55,11 @@ Training r2: 0.8192
 Validation r2: 0.7623
 ```
 
-![Actuals_vs_Predicted.png](img/Actuals_vs_Predicted.png)
+![Actuals_vs_Predicted.png](img%2FActuals_vs_Predicted.png)
 
 * Most resiuals are centered around 0, indicating that the model is performing well.
-![Residuals.png](img/Residuals.png)
 
+![Residuals.png](img%2FResiduals.png)
 
 ### Future Work
 
