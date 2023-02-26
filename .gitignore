@@ -1,0 +1,12 @@
+# Ignore pushing .ipynb_checkpoints to github
+*.ipynb_checkpoints/
+
+# Ignore pushing .DS_Store to github
+.DS_Store
+
+# Ignore pushing .env to github
+.env
+
+# Ignore pycache
+__pycache__
+
