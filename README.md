@@ -42,6 +42,7 @@ Various visualizations are used to better understand the data, including:
 
 ## Model
 * XGBoost regression is used to predict the price of an Airbnb listing
+* XGBoost is an advanced implementation of gradient boosting which optimizes the gradient boosting algorithm using a number of techniques such as parallel processing, tree pruning, regularization and handling missing values. XGBoost works by iteratively training a sequence of decision trees, where each tree attempts to correct the errors of the previous tree.
 * Feature importances are visualized to determine which features are most important in predicting the price of an Airbnb listing
 
 
