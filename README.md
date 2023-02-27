@@ -1,6 +1,39 @@
 # Airbnb Prices in Europe Analysis
 
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Data](#data)
+2. [Libraries used](#libraries-used)
+3. [Visualizations](#visualizations)
+4. [Data Preprocessing](#data-preprocessing)
+5. [Feature Engineering](#feature-engineering)
+6. [Model](#model)
+7. [Conclusion](#conclusion)
+8. [Future Work](#future-work)
+
+## Introduction
 This code performs analysis of Airbnb prices in Europe. It reads all the csv files in the folder and combines them into one using pandas. The data is then preprocessed by dropping unnecessary columns, checking for null values, and cross-featuring the longitude and latitude.
+
+## Data
+Link to the dataset: https://www.sciencedirect.com/science/article/pii/S0261517721000388?via%3Dihub#sec3
+
+|price | log of the final sum |
+| --- |----------------------|
+|bedrooms |	number of bedrooms |
+|person_capacity |	maximum number of guests |
+|room_type |	type of room |
+|room_private |	dummy for private rooms |
+|room_shared |	dummy for shared rooms |
+|cleanliness |	guest reviews: scale to 10 |
+|guest_satisfaction |	guest reviews: scale to 100 |
+|superhost |	dummy for hosts with the superhost status |
+|multi |	dummy for listings offered by hosts with 2–4 listings |
+|biz |	dummy for listings offered by hosts with more than 4 listings |
+|dist |	distance to the city centre in kilometres |
+|metro_dist |	distance to the closest metro station in kilometres |
+|attr_index |	attraction index: scale to 100 |
+|rest_index |	restaurant index: scale to 100 |
+
 
 ## Libraries used
 The following libraries are used in this analysis:
@@ -47,14 +80,14 @@ Various visualizations are used to better understand the data, including:
 
 
 ## Conclusion
-This analysis provides insights into the factors that contribute to the price of an Airbnb listing in Europe. It shows the importance of features such as the number of bedrooms, the distance from the city center, and the satisfaction rating. The XGBoost regression model was able to accurately predict the price of a listing with an R-squared value of 79% for the validation data and 90% for the training data.
+This analysis provides insights into the factors that contribute to the price of an Airbnb listing in Europe. It shows the importance of features such as the number of bedrooms, the distance from the city center, and the satisfaction rating. The XGBoost regression model was able to accurately predict the price of a listing with an R-squared value of 80% for the validation data and 93% for the training data.
 
 ```
-Training MSE: 0.0342
-Validation MSE: 0.0691
+Training MSE: 0.0233
+Validation MSE: 0.0662
 
-Training r2: 0.8978
-Validation r2: 0.7928
+Training r2: 0.9303
+Validation r2: 0.8014
 ```
 
 ![Actuals_vs_Predicted.png](img%2FActuals_vs_Predicted.png)
