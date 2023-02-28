@@ -70,17 +70,30 @@ Various visualizations are used to better understand the data, including:
 * Cross-featuring the longitude and latitude
 * Log transforming the numerical columns to improve normality of distributions
 
-![Feature importances.png](img%2FFeature%20importances.png)
+## Models
 
+### Random Forest Regression:
+* Random forests regressors are an ensemble learning method for regression that operate by constructing a multitude of decision trees at training time and outputting the mean prediction of the individual trees.
+* The random forest regressor was used to compare the performance of the XGBoost model.
+* The random forest regressor was not used in the final model because it performed worse than the XGBoost model.
+* The random forest regressor was able to achieve an R-squared value of 75% for the validation data and 78% for the training data.
 
-## Model
-* XGBoost regression is used to predict the price of an Airbnb listing
+```
+Training MSE: 0.075
+Validation MSE: 0.0838
+
+Training r2: 0.776
+Validation r2: 0.7485
+
+MSE training-validation gap: 0.0088
+r2 training-validation gap: 0.0274
+```
+
+### XGBoost Regression:
 * XGBoost is an advanced implementation of gradient boosting which optimizes the gradient boosting algorithm using a number of techniques such as parallel processing, tree pruning, regularization and handling missing values. XGBoost works by iteratively training a sequence of decision trees, where each tree attempts to correct the errors of the previous tree.
-* Feature importances are visualized to determine which features are most important in predicting the price of an Airbnb listing
-
-
-## Conclusion
-This analysis provides insights into the factors that contribute to the price of an Airbnb listing in Europe. It shows the importance of features such as the number of bedrooms, the distance from the city center, and the satisfaction rating. The XGBoost regression model was able to accurately predict the price of a listing with an R-squared value of 76% for the validation data and 79% for the training data.
+* Feature importances are visualized to determine which features are most important in predicting the price of an Airbnb listing.
+* The XGBoost model was able to achieve an R-squared value of 76% for the validation data and 79% for the training data.
+* The XGBoost model was used in the final model because it performed better than the random forest regressor.
 
 ```
 Training MSE: 0.071
@@ -93,6 +106,13 @@ Difference between training and validation scores:
 MSE: 0.0088
 r2: 0.0273
 ```
+
+![Feature importances.png](img%2FFeature%20importances.png)
+
+
+## Conclusion
+This analysis provides insights into the factors that contribute to the price of an Airbnb listing in Europe. It shows the importance of features such as the number of bedrooms, the distance from the city center, and the satisfaction rating. The XGBoost regression model was able to accurately predict the price of a listing with an R-squared value of 76% for the validation data and 79% for the training data.
+
 
 ![Actuals_vs_Predicted.png](img%2FActuals_vs_Predicted.png)
 
