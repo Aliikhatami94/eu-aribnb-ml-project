@@ -80,14 +80,18 @@ Various visualizations are used to better understand the data, including:
 
 
 ## Conclusion
-This analysis provides insights into the factors that contribute to the price of an Airbnb listing in Europe. It shows the importance of features such as the number of bedrooms, the distance from the city center, and the satisfaction rating. The XGBoost regression model was able to accurately predict the price of a listing with an R-squared value of 80% for the validation data and 93% for the training data.
+This analysis provides insights into the factors that contribute to the price of an Airbnb listing in Europe. It shows the importance of features such as the number of bedrooms, the distance from the city center, and the satisfaction rating. The XGBoost regression model was able to accurately predict the price of a listing with an R-squared value of 76% for the validation data and 79% for the training data.
 
 ```
-Training MSE: 0.0233
-Validation MSE: 0.0662
+Training MSE: 0.071
+Validation MSE: 0.0798
 
-Training r2: 0.9303
-Validation r2: 0.8014
+Training r2: 0.7881
+Validation r2: 0.7607
+
+Difference between training and validation scores:
+MSE: 0.0088
+r2: 0.0273
 ```
 
 ![Actuals_vs_Predicted.png](img%2FActuals_vs_Predicted.png)
